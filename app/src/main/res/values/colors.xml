@@ -3,4 +3,77 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="blue_bg_color">#644AF1</color>
+    <color name="blue_bg_color_50">#80644AF1</color>
+    <color name="blue7">#12644AF1</color>
+    <color name="get_started_bg_color">#fffc01</color>
+    <color name="yellow25">#40fffc01</color>
+    <color name="yellow50">#7ffffc01</color>
+    <color name="yellow">#fffc01</color>
+    <color name="yellow_deeper">#8D8A15</color>
+    <color name="text_chat_bg_color">#0f001a</color>
+    <color name="text_chat_edit_text_bg_color">#292736</color>
+    <color name="friend_list_last_chat_text_color">#5e5a6e</color>
+    <color name="red_primary">#ff2110</color>
+    <color name="red_primary_darker">#d91c0d</color>
+    <color name="red_common_pure">#ff1529</color>
+
+    <color name="block_text_color">#f44336</color>
+    <color name="first_name_remind_text_color">#f44336</color>
+
+    <!--不透明度黑白-->
+    <color name="white">#FFFFFF</color>
+    <color name="white10">#19ffffff</color>
+    <color name="white20">#33ffffff</color>
+    <color name="white25">#40ffffff</color>
+    <color name="white30">#4cffffff</color>
+    <color name="white40">#66ffffff</color>
+    <color name="white50">#7fffffff</color>
+    <color name="white60">#99ffffff</color>
+    <color name="white70">#b2ffffff</color>
+    <color name="white80">#ccffffff</color>
+    <color name="white86">#deffffff</color>
+    <color name="white90">#e5ffffff</color>
+
+
+    <color name="black">#000000</color>
+    <color name="black10">#19000000</color>
+    <color name="black12">#1f000000</color>
+    <color name="black20">#33000000</color>
+    <color name="black24">#3D000000</color>
+    <color name="black30">#4c000000</color>
+    <color name="black35">#59000000</color>
+    <color name="black40">#66000000</color>
+    <color name="black47">#7a000000</color>
+    <color name="black50">#7f000000</color>
+    <color name="black52">#85000000</color>
+    <color name="black56">#8f000000</color>
+    <color name="black60">#99000000</color>
+    <color name="black63">#a3000000</color>
+    <color name="black70">#b2000000</color>
+    <color name="black80">#cc000000</color>
+    <color name="black85">#d9000000</color>
+    <color name="black87">#DE000000</color>
+    <color name="black90">#e5000000</color>
+
+    <color name="gray_primary_lighter">#c6bfbd</color>
+    <color name="black_primary_lighter">#1b1a1a</color>
+    <color name="date_picker_dialog_bg_color">#263238</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="match_report_focused">#3835ba</color>
+    <color name="match_report_no_focused">#644AF1</color>
+    <color name="blue40">#66644AF1</color>
+    <color name="custom_notification_text_blue">#4c47f9</color>
+    <color name="avatar_long_click_circular_bg">#11644af1</color>
+    <color name="monkey_king_circular_bg">#444369</color>
+    <color name="monkey_king_circular_showed_bg">#33000000</color>
+    <color name="text_chat_bg">#262242</color>
+    <color name="text_chat_bg90">#e6262242</color>
+    <color name="unlock_plana_my_avatar_bg_color">#7e769b</color>
+    <color name="twop_dashboard_avatar_bg">#7e769b</color>
+    <color name="twop_invite_friends_bg">#99000000</color>
+
+
 </resources>
