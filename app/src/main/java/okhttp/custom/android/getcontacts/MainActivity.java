@@ -1,12 +1,15 @@
 package okhttp.custom.android.getcontacts;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -140,4 +143,73 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 打电话
+     *
+     * @param tel 电话号码
+     */
+    private void callPhone1(String tel) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + tel));
+        startActivity(intent);
+    }
+
+    /**
+     * 打电话
+     *
+     * @param tel 电话号码
+     */
+    @SuppressLint("MissingPermission")
+    private void callPhone2(String tel) {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + tel));
+        startActivity(intent);
+    }
+
+    /**
+     * 发送短信
+     *
+     * @param tel     电话号码
+     * @param content 短息内容
+     */
+    private void sendMessage1(String tel, String content) {
+        Intent sendIntent = new Intent(SENT_SMS_ACTION);
+        PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, sendIntent, 0);
+
+        SmsManager smsManager = SmsManager.getDefault();
+        List<String> divideContents = smsManager.divideMessage(content);
+        for (String text : divideContents) {
+            smsManager.sendTextMessage(tel, null, text, sendPI, null);
+        }
+    }
+
+    /**
+     * 发送短信
+     *
+     * @param tel     电话号码
+     * @param content 短息内容
+     */
+    private void sendMessage2(String tel, String content) {
+        Intent deliverIntent = new Intent(DELIVERED_SMS_ACTION);
+        PendingIntent deliverPI = PendingIntent.getBroadcast(this, 0, deliverIntent, 0);
+
+        SmsManager smsManager = SmsManager.getDefault();
+        List<String> divideContents = smsManager.divideMessage(content);
+        for (String text : divideContents) {
+            smsManager.sendTextMessage(tel, null, text, null, deliverPI);
+        }
+    }
+
+    /**
+     * 发送短信(掉起发短信页面)
+     *
+     * @param tel     电话号码
+     * @param content 短息内容
+     */
+    private void sendMessage3(String tel, String content) {
+        if (PhoneNumberUtils.isGlobalPhoneNumber(tel)) {
+            Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + tel));
+            intent.putExtra("sms_body", content);
+            startActivity(intent);
+        }
+    }
 }
