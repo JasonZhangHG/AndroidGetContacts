@@ -21,5 +21,6 @@ public class CCApplication extends Application {
         super.onCreate();
         INSTANCE = this;
         Utils.init(this);
+        ToastHelper.init(this);
     }
 }

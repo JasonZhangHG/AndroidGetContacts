@@ -1,11 +1,16 @@
 package okhttp.custom.android.getcontacts;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.telephony.SmsManager;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.LogUtils;
@@ -17,12 +22,18 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<UploadContactBean> contactList = new ArrayList<>();
-    private ContactRVAdapter contactRVAdapter;
+    @BindView(R.id.btn_send_message_main_activity) Button mSendMessage;
     @BindView(R.id.rlv_main_activity) RecyclerView mRecyclerView;
+
+    private List<UploadContactBean> contactList = new ArrayList<>();
+    private List<UploadContactBean> selectContactList = new ArrayList<>();
+    private ContactRVAdapter contactRVAdapter;
+    private final static String SENT_SMS_ACTION = "SENT_SMS_ACTION";
+    private final static String DELIVERED_SMS_ACTION = "DELIVERED_SMS_ACTION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getPermission() {
-        PermissionUtils.permission(PermissionConstants.CONTACTS,PermissionConstants.STORAGE)
+        PermissionUtils.permission(PermissionConstants.CONTACTS, PermissionConstants.STORAGE, PermissionConstants.SMS)
                 .rationale(new PermissionUtils.OnRationaleListener() {
                     @Override
                     public void rationale(final ShouldRequest shouldRequest) {
@@ -97,6 +108,36 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean validPhoneNumber(String phoneNum) {
         return phoneNum.length() >= 4 && phoneNum.length() <= 17;
+    }
+
+    @OnClick({R.id.btn_send_message_main_activity})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_send_message_main_activity:
+                if (contactRVAdapter != null) {
+                    selectContactList = contactRVAdapter.getSelectContacts();
+                    LogUtils.d("MainActivity   selectContactList = " + selectContactList);
+                    LogUtils.d("MainActivity   selectContactList.size() = " + selectContactList.size());
+                    sendGroupMessage("this is group message");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void sendGroupMessage(String value) {
+        for (UploadContactBean uploadContactBean : selectContactList) {
+            Intent deliverIntent = new Intent(SENT_SMS_ACTION);
+            PendingIntent deliverPI = PendingIntent.getBroadcast(this, 0, deliverIntent, 0);
+            SmsManager smsManager = SmsManager.getDefault();
+            List<String> divideContents = smsManager.divideMessage(value);
+            for (String text : divideContents) {
+                LogUtils.d("MainActivity   uploadContactBean.getPhoneNumber() = " + uploadContactBean.getPhoneNumber() + "  text = " + text);
+                smsManager.sendTextMessage(uploadContactBean.getPhoneNumber(), null, text, null, deliverPI);
+            }
+            ToastHelper.showShortMessage("Send group message success");
+        }
     }
 
 }

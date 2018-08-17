@@ -37,9 +37,10 @@ public class ContactRVAdapter extends RecyclerView.Adapter<ContactRVAdapter.Cont
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactRVAdapterHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull final ContactRVAdapterHolder holder, final int position) {
         LogUtils.d("MainActivity ContactRVAdapter onBindViewHolder position = " + contactList.get(position));
+        holder.mItem.setSelected(false);
+        contactList.get(position).setSelected(false);
         Glide.with(mContext)
                 .load(contactList.get(position).getAvatarUrl())
                 .placeholder(R.drawable.icon_normal)
@@ -49,11 +50,33 @@ public class ContactRVAdapter extends RecyclerView.Adapter<ContactRVAdapter.Cont
 
         holder.mName.setText(contactList.get(position).getName());
         holder.mPhoneNumber.setText(contactList.get(position).getPhoneNumber());
+        holder.mItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (holder.mItem.isSelected()) {
+                    holder.mItem.setSelected(false);
+                    contactList.get(position).setSelected(false);
+                } else {
+                    holder.mItem.setSelected(true);
+                    contactList.get(position).setSelected(true);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return contactList.size();
+    }
+
+    public List<UploadContactBean> getSelectContacts() {
+        List<UploadContactBean> selectList = new ArrayList<>();
+        for (UploadContactBean uploadContactBean : contactList) {
+            if (uploadContactBean.isSelected()) {
+                selectList.add(uploadContactBean);
+            }
+        }
+        return selectList;
     }
 
     public static class ContactRVAdapterHolder extends RecyclerView.ViewHolder {

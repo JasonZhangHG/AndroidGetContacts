@@ -12,6 +12,7 @@ public class UploadContactBean implements Comparable<UploadContactBean> {
     private String pinyin; // 姓名对应的拼音
     private String firstLetter; // 拼音的首字母
     private boolean isContainsEmoji;
+    private boolean isSelected;
 
     public UploadContactBean(String name, String phoneNumber) {
         this.name = name;
@@ -107,6 +108,14 @@ public class UploadContactBean implements Comparable<UploadContactBean> {
         } else {
             return pinyin.compareToIgnoreCase(another.getPinyin());
         }
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     @Override

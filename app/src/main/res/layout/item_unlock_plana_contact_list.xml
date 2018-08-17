@@ -10,6 +10,9 @@
         android:id="@+id/ll_item_unlock_plana_contact_list"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/selector_contacts"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
