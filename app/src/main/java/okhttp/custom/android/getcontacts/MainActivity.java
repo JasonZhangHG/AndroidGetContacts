@@ -2,6 +2,7 @@ package okhttp.custom.android.getcontacts;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.btn_send_message_main_activity) Button mSendMessage;
+    @BindView(R.id.btn_intent_sms_main_activity) Button mIntenSMS;
     @BindView(R.id.rlv_main_activity) RecyclerView mRecyclerView;
 
     private List<UploadContactBean> contactList = new ArrayList<>();
@@ -113,15 +115,19 @@ public class MainActivity extends AppCompatActivity {
         return phoneNum.length() >= 4 && phoneNum.length() <= 17;
     }
 
-    @OnClick({R.id.btn_send_message_main_activity})
+    @OnClick({R.id.btn_send_message_main_activity, R.id.btn_intent_sms_main_activity})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_send_message_main_activity:
                 if (contactRVAdapter != null) {
                     selectContactList = contactRVAdapter.getSelectContacts();
-                    LogUtils.d("MainActivity   selectContactList = " + selectContactList);
-                    LogUtils.d("MainActivity   selectContactList.size() = " + selectContactList.size());
                     sendGroupMessage("this is group message");
+                }
+                break;
+            case R.id.btn_intent_sms_main_activity:
+                if (contactRVAdapter != null) {
+                    selectContactList = contactRVAdapter.getSelectContacts();
+                    intentGroupSMSMessage("this is group message with Intent to SMS ");
                 }
                 break;
             default:
@@ -136,11 +142,18 @@ public class MainActivity extends AppCompatActivity {
             SmsManager smsManager = SmsManager.getDefault();
             List<String> divideContents = smsManager.divideMessage(value);
             for (String text : divideContents) {
-                LogUtils.d("MainActivity   uploadContactBean.getPhoneNumber() = " + uploadContactBean.getPhoneNumber() + "  text = " + text);
                 smsManager.sendTextMessage(uploadContactBean.getPhoneNumber(), null, text, null, deliverPI);
             }
             ToastHelper.showShortMessage("Send group message success");
         }
+    }
+
+    public void intentGroupSMSMessage(String content) {
+        String phoneNumber = "";
+        for (UploadContactBean uploadContactBean : selectContactList) {
+            phoneNumber = phoneNumber + "," + StringUtils.trim(uploadContactBean.getPhoneNumber());
+        }
+        sendSMSMessage(content, this, phoneNumber);
     }
 
     /**
@@ -210,6 +223,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + tel));
             intent.putExtra("sms_body", content);
             startActivity(intent);
+        }
+    }
+
+    public static void sendSMSMessage(String message, Context mContext, String number) {
+        Uri smsToUri = Uri.parse("smsto:");
+        Intent intent = new Intent(Intent.ACTION_SENDTO, smsToUri);
+        intent.setData(Uri.parse("smsto:" + number));
+        //to do  add Monkey Download url
+        intent.putExtra("sms_body", message);
+        if (mContext != null) {
+            mContext.startActivity(intent);
         }
     }
 }
