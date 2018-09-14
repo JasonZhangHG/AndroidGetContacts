@@ -60,7 +60,7 @@ public class ContactsInfoHelper {
 
         @Override
         protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-            Map<Integer, ContactsInfo> contactIdMap;
+            Map<String, ContactsInfo> contactIdMap;
             List<ContactsInfo> contactsInfos = new ArrayList<ContactsInfo>();
             if (cursor != null && cursor.getCount() > 0) {
                 contactIdMap = new HashMap<>();
@@ -68,13 +68,12 @@ public class ContactsInfoHelper {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToPosition(i);
                     int contactId = cursor.getInt(0);
-                    int id = cursor.getInt(1);
                     String name = cursor.getString(2);
-                    String number = cursor.getString(3);
+                    String number = StringUtils.trim(cursor.getString(3));
                     int isStarted = cursor.getInt(4);
                     String photo = cursor.getString(5);
 
-                    if (!contactIdMap.containsKey(contactId) && name != null && number != null) {
+                    if (!contactIdMap.containsKey(number) && name != null && number != null) {
                         ContactsInfo contactsInfo = new ContactsInfo();
                         contactsInfo.setContactId(contactId);
                         contactsInfo.setName(name);
@@ -82,7 +81,7 @@ public class ContactsInfoHelper {
                         contactsInfo.setPhoto(photo);
                         contactsInfo.setStared(isStarted == 1);
                         contactsInfos.add(contactsInfo);
-                        contactIdMap.put(contactId, contactsInfo);
+                        contactIdMap.put(number, contactsInfo);
                     }
                 }
                 cursor.close();

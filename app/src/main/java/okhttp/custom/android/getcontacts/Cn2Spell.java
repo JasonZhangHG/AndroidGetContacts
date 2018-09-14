@@ -1,7 +1,4 @@
 package okhttp.custom.android.getcontacts;
-
-import com.blankj.utilcode.util.LogUtils;
-
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -59,25 +56,27 @@ public class Cn2Spell {
     public static String getPinYin(String chines) {
         sb.setLength(0);
         char[] nameChar = chines.toCharArray();
-        LogUtils.d("MainActivity getPinYin nameChar " + nameChar);
         HanyuPinyinOutputFormat defaultFormat = new HanyuPinyinOutputFormat();
         defaultFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
         defaultFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-        LogUtils.d("MainActivity getPinYin defaultFormat " + defaultFormat);
+        if (nameChar != null && nameChar.length > 0) {
+            for (int i = 0; i < nameChar.length; i++) {
+                if (nameChar[i] > 128) {
+                    try {
+                        if (PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat) != null && PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat).length > 0) {
+                            sb.append(PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat)[0]);
+                        } else {
+                            sb.append(nameChar[i]);
+                        }
 
-        for (int i = 0; i < nameChar.length; i++) {
-            if (nameChar[i] > 128) {
-                try {
-                    sb.append(PinyinHelper.toHanyuPinyinStringArray(nameChar[i], defaultFormat)[0]);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    sb.append(nameChar[i]);
                 }
-            } else {
-                sb.append(nameChar[i]);
             }
         }
-        LogUtils.d("MainActivity getPinYin sb " + sb);
-
         return sb.toString();
     }
 
